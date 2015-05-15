@@ -1,0 +1,124 @@
+Control;Code;EN:English;SP:Español
+
+1;menu_Images;Images;Imágenes
+1;menu_ImagesOpen;Open;Abrir
+1;menu_ImagesNormSpa;Spatial normalization;Normalización espacial
+1;menu_ImagesNormIntMax;Intensity normalization (Maximum);Normalización en intensidad (máximo)
+1;menu_ImagesNormIntMean;Intensity normalization (Global intensity);Normalización en intensidad (intensidad global)
+1;menu_ImagesSave;Save;Guardar
+1;menu_ImagesClose;Close;Cerrar
+1;menu_ImagesSelect;Select;Seleccionar
+1;menu_ImagesSelectAll;Select all;Seccionar todo
+1;menu_ImagesSelectInvert;Invert selection;Invertir selección
+1;menu_ImagesSelectNone;Remove selection;Quitar selección
+1;menu_ImagesSelection;Selected images;Imágenes seleccionadas
+1;menu_ImagesMarkAsCtl;Mark as control;Marcar como control
+1;menu_ImagesMarkAsPat;Mark as pathological;Marcar como patológico
+1;menu_Trn;Training;Entrenamiento
+1;menu_TrnCreate;Create;Crear
+1;menu_TrnLoad;Load;Cargar
+1;menu_TrnDetails;Show details;Mostrar detalles
+1;menu_View;View;Vista
+1;menu_ViewList;List of images;Lista de imágenes
+1;menu_ViewGrid;Grid of images;Mosaico de imágenes
+1;menu_ViewSec;Secuence of images;Secuencia de imágenes
+1;menu_Lang;Language;Idioma
+1;menu_Colormaps;Colormap;Mapa de color
+
+1;statusBar_Images;Images;Imágenes
+1;statusBar_Train;Train;Entrenamiento
+1;statusBar_Selected;selected; seleccionadas
+
+1;main_LoadImages;Load images;Cargar imágenes
+1;main_LoadingImages;Loading images;Cargando imágenes
+1;main_SavingImages;Saving images;Guardando imágenes
+1;main_Nomalizing;Normalizing images;Normalizando imágenes
+1;main_NoImSel;No image selected;No hay imágenes seleccionadas
+1;main_AllFormats;All supported formats;Todos los formatos soportados
+1;main_SelectMod;Please select image modality;Seleccione el tipo de imagen
+1;main_NoSPM;SPM was not found in the path. It is required for spatial normalization;No se encontró SPM en el path. Se requiere SPM para la normalización espacial
+1;main_NoTemplate;No template found for this image type;No se encontró ninguna plantilla para el tipo de imagen acutal
+1;main_NoImgTrn;No selected images. Images for training should be loaded and selected;No hay imágenes seleccionadas. Las imágenes para entrenamiento deben haber sido cargadas y seleccionadas previamente
+1;main_ManyTypes;All the images should be of the same type;Todas las imágenes deben ser del mismo tipo
+1;main_IncorrectClasses;There must be images of two classes;Debe haber imágenes de dos clases
+1;main_SaveDglTitle;Please enter file name and format;Indique nombre y formato de archivo
+1;main_CurrentNames;Current names;Nombres actuales
+1;main_CreatingUI;Updating user interface;Actualizando interfaz de usuario
+
+1;main_NoTraining;No training was loaded;No hay ningún entrenamiento cargado
+1;main_ClassUnable;Unable to classify;No se puede clasificar
+1;main_DifImgType;Current image type does not match with training images;El tipo de imagen no coincide con el de entrenamiento
+1;main_DifImgSize;Current image size does not match with training images;El tamaño de la imagen no coincide con las del entrenamiento
+1;main_ScattDim;Please enter the scatter plot dimension (2D or 3D);Seleccione la dimensión de la figura (2D o 3D)
+1;main_ResultVisual;Results visualization;Representacion de los resultados
+
+
+
+1;listUI_NameTxt;Name;Nombre
+1;listUI_ClassTxt;Class;Clase
+1;listUI_TypeTxt;Type;Tipo
+
+1;secuUI_SliceView;View;Vista
+1;secuUI_ViewAxial;Axial;Axial
+1;secuUI_ViewCoronal;Coronal;Coronal
+1;secuUI_ViewSagital;Sagital;Sagital
+1;secuUI_ImageTxt;Image;Imagen
+1;secuUI_SliceTxt;Slice;Corte
+1;secuUI_ImLeftTip;Show previous image;Mostrar imagen anterior
+1;secuUI_ImRightTip;Show next image;Mostrar imagen siguiente
+1;secuUI_PlayTip;Start/stop the slice secuence;Iniciar/parar la secuencia de cortes
+1;secuUI_SliceModeTip;Show all/one slice;Mostrar todos/un corte
+1;secuUI_ClassifyTip;Estimate the class (multivariate analysis);Estimar la clase (análisis multivariado)
+1;secuUI_ActionTitle;Actions;Acciones
+
+1;all_lang_error;There is a problem with the language file. Please check;Hay un problema con el archivo de idioma. Verifique su integridad
+1;all_SelecBtn;Select;Seleccionar
+1;all_OkBtn;OK;Aceptar
+1;all_CancelBtn;Cancel;Cancelar
+1;all_Warning;Warning;Aviso
+1;all_Error;Error;Error
+1;all_PleaseSelec;Please, select an option;Por favor, seleccione una opción
+
+
+1;selecTrn_Timg;Imaging modality:;Tipo de imagen:
+1;selecTrn_Trn;Available trainings:;Entrenamientos disponibles:
+1;selecTrn_Details;Training details:;Información del entrenamiento seleccionado:
+1;selecTrn_LoadTrn;Could not open file;No se puede abrir el archivo
+1;selecTrn_Title;Load training;Cargar entrenamiento
+
+1;infoTrn_Title;Training details;Información del entrenamiento
+1;infoTrn_Orient;Images orientation:;Orientación de las imágenes:
+1;infoTrn_Name;Name;Nombre
+1;infoTrn_Method;Method;Método
+1;infoTrn_Date;Date;Fecha
+1;infoTrn_Dir;Location;Localización
+1;infoTrn_Images;Images;Imágenes
+1;infoTrn_Mod;Modality;Modalidad
+1;infoTrn_Number;Number;Número
+1;infoTrn_OSize;Original size;Tamaño original
+1;infoTrn_RSize;Reduced size;Tamaño reducido
+1;infoTrn_IntTh;Intensity threshold;Umbral de intensidad
+1;infoTrn_IntThSuf;% maximum intensity;% de la intensidad máxima
+
+
+1;resClas_Title;Estimated diagnosis;Diagnóstico estimado
+1;resClas_Estimation;Estimated class is;La clases estimada es
+1;resClas_Classes;Possible classes:;Clases posibles:
+1;resClas_Add2Trn;Add to training;Añadir al entrenamiento
+1;resClas_None;None;Ninguna
+
+
+1;dlgEntrenar_Title;Create new training;Crear nuevo entrenamiento
+1;dlgEntrenar_NameLab;Name;Nombre
+1;dlgEntrenar_MetLab;Method;Método
+1;dlgEntrenar_NoMethodError;Method not found;Método no encontrado
+1;dlgEntrenar_NoNameError;The training name is required;Debe indicar un nombre para el entrenamiento
+1;dlgEntrenar_CreatedTitle;Training has been created;Entrenamiento creado
+1;dlgEntrenar_Created;Generated file:;Generado el archivo:
+
+
+1;about_Title;About PETRA;Acerca de PETRA
+1;about_Release;Released on;Liberado en
+1;about_Licence;Licence;Licencia
+1;about_Credits;Credits;Créditos
+
