@@ -7,3 +7,6 @@ The toolbox includes algorithms for simple and advanced analysis and classificat
 
 ## Use
 The PETRA toolbox must be launched from within Matlab simply using the command `petra`, after adding the folder containing all the code to the matlab `PATH`.
+
+## Cite
+Segovia-Román, Fermín, et al. "PETRA: Multivariate analyses for neuroimaging data." *Proceeding of 2nd International Work-Conference on Bioinformatics and Biomedical Engineering*. 2014.
