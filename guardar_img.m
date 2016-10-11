@@ -22,12 +22,12 @@ function ok = guardar_img (stack, str, fmt, desti)
             ok = true;
 
         elseif strcmp(fmt,'nii')
-            img = im2uint16(squeeze(stack));
-            vs = abs (str.hdr.dime.pixdim (2:4));
-            for i=1:size(stack,2), stackps (:,i,:) = rot90(squeeze(img(:,i,:)),3); end
-            for i=1:size(stackps,3), stackpss (:,:,i) = rot90(squeeze(stackps(:,:,i)),2); end
-            strnew = nifticreate(stackpss, 2, vs);
-            niftiwrite (strnew, desti);
+%             img = im2uint16(squeeze(stack));
+%             vs = abs (str.hdr.dime.pixdim (2:4));
+%             for i=1:size(stack,2), stackps (:,i,:) = rot90(squeeze(img(:,i,:)),3); end
+%             for i=1:size(stackps,3), stackpss (:,:,i) = rot90(squeeze(stackps(:,:,i)),2); end
+%             strnew = nifticreate(stackpss, 2, vs);
+            niftiwrite (str, desti);
             ok = true;
 
         elseif strcmp(fmt,'hdr')
