@@ -61,6 +61,9 @@ Control;Code;EN:English;SP:Español
 1;listUI_ClassTxt;Class;Clase
 1;listUI_TypeTxt;Type;Tipo
 1;listUI_EstimateBtnTxt;Estimate;Estimar
+1;listUI_RotateCW;Rotate 90 degrees clockwise;Rotar 90 grados en sentido horario
+1;listUI_RotateACW;Rotate 90 degrees anticlockwise;Rotar 90 grados en sentido antihorario
+1;listUI_Flip;Flip dimension;Voltear dimension
 
 1;secuUI_SliceView;View;Vista
 1;secuUI_ViewAxial;Axial;Axial
