@@ -26,24 +26,27 @@ Control;Code;EN:English;SP:Español
 1;menu_Colormaps;Colormap;Mapa de color
 
 1;statusBar_Images;Images;Imágenes
-1;statusBar_Train;Train;Entrenamiento
+1;statusBar_Train;Training;Entrenamiento
 1;statusBar_Selected;selected; seleccionadas
 
 1;main_LoadImages;Load images;Cargar imágenes
 1;main_LoadingImages;Loading images;Cargando imágenes
 1;main_SavingImages;Saving images;Guardando imágenes
 1;main_Nomalizing;Normalizing images;Normalizando imágenes
+1;main_CreatingUI;Updating user interface;Actualizando interfaz de usuario
 1;main_NoImSel;No image selected;No hay imágenes seleccionadas
 1;main_AllFormats;All supported formats;Todos los formatos soportados
 1;main_SelectMod;Please select image modality;Seleccione el tipo de imagen
-1;main_NoSPM;SPM was not found in the path. It is required for spatial normalization;No se encontró SPM en el path. Se requiere SPM para la normalización espacial
+1;main_NoSPM;SPM was not found in the path. It is required for spatial normalization;No se encontró SPM en el path. SPM es necesario para la normalización espacial
+1;main_InvalidSPM;Wrong SPM version. Please install SPM8 or SPM12;Version de SPM incompatible. Por favor instale SPM8 o SPM12
 1;main_NoTemplate;No template found for this image type;No se encontró ninguna plantilla para el tipo de imagen acutal
 1;main_NoImgTrn;No selected images. Images for training should be loaded and selected;No hay imágenes seleccionadas. Las imágenes para entrenamiento deben haber sido cargadas y seleccionadas previamente
 1;main_ManyTypes;All the images should be of the same type;Todas las imágenes deben ser del mismo tipo
 1;main_IncorrectClasses;There must be images of two classes;Debe haber imágenes de dos clases
+1;main_PreparingData;Preparing images; Preparando imágenes
 1;main_SaveDglTitle;Please enter file name and format;Indique nombre y formato de archivo
 1;main_CurrentNames;Current names;Nombres actuales
-1;main_CreatingUI;Updating user interface;Actualizando interfaz de usuario
+1;main_SaveHelp;You can use the following keys as part of the name:\n\n#name\n#class\n#number\n\nThey will be respectively replaced by the current name, the class and the number of each image.;Puede usar las siguientes palabras clave como parte del nombre:\n\n#name\n#class\n#number.\n\nEstas claves serán reemplazadas por el nombre actual, la clase o el número de orden de cada imagen respectivamente.
 
 1;main_NoTraining;No training was loaded;No hay ningún entrenamiento cargado
 1;main_ClassUnable;Unable to classify;No se puede clasificar
@@ -57,6 +60,7 @@ Control;Code;EN:English;SP:Español
 1;listUI_NameTxt;Name;Nombre
 1;listUI_ClassTxt;Class;Clase
 1;listUI_TypeTxt;Type;Tipo
+1;listUI_EstimateBtnTxt;Estimate;Estimar
 
 1;secuUI_SliceView;View;Vista
 1;secuUI_ViewAxial;Axial;Axial
@@ -113,6 +117,7 @@ Control;Code;EN:English;SP:Español
 1;dlgEntrenar_MetLab;Method;Método
 1;dlgEntrenar_NoMethodError;Method not found;Método no encontrado
 1;dlgEntrenar_NoNameError;The training name is required;Debe indicar un nombre para el entrenamiento
+1;dlgEntrenar_Creating;Creating training ...; Creando entrenamiento ...
 1;dlgEntrenar_CreatedTitle;Training has been created;Entrenamiento creado
 1;dlgEntrenar_Created;Generated file:;Generado el archivo:
 

@@ -123,37 +123,37 @@ function [stack, str]= leer_img(nombre, tipoImg, ruta, orientar)
     end
     
     %% Lee  el archivo xml en caso de que la imagen sea de ADNI
-    [ruta_tmp,nombre_tmp]=fileparts(nombre);
-    adni=~isempty(regexp(nombre_tmp,'ADNI','ONCE'));
-    ppmi=~isempty(regexp(nombre_tmp,'PPMI','ONCE'));
-    if or(adni,ppmi)
-        listxml=dir([ruta_tmp '*.xml']);
-        try 
-        i=1;
-        while isempty(regexp(listxml(i).name,nombre_tmp(end-10:end), 'once'))
-            i=i+1;
-            if i==numel(listxml)
-                break
-            end
-        end
-        file=nombre_tmp;
-        filexml=listxml(i).name;
-        [infor]=read_info(file,filexml,ruta_tmp);
-        if isfield(infor.project.subject,'subjectInfo')
-            clases=infor.project.subject.subjectInfo(1).CONTENT;
-            subject_id=infor.project.subject.subjectIdentifier;
-        else
-            clases=infor.project.subject.researchGroup;
-            subject_id=infor.project.subject.subjectIdentifier;
-        end
-        str.class_label=clases;
-        str.subject_id=subject_id;
-        str.adnic.adni=adni;
-        str.adnic.ppmi=ppmi;
-        catch
-            msgbox('los archivos xml deben estar contenidos en el mismo directorio si quiere leer la info')
-        end
-    end
+%     [ruta_tmp,nombre_tmp]=fileparts(nombre);
+%     adni=~isempty(regexp(nombre_tmp,'ADNI','ONCE'));
+%     ppmi=~isempty(regexp(nombre_tmp,'PPMI','ONCE'));
+%     if or(adni,ppmi)
+%         listxml=dir([ruta_tmp '*.xml']);
+%         try 
+%         i=1;
+%         while isempty(regexp(listxml(i).name,nombre_tmp(end-10:end), 'once'))
+%             i=i+1;
+%             if i==numel(listxml)
+%                 break
+%             end
+%         end
+%         file=nombre_tmp;
+%         filexml=listxml(i).name;
+%         [infor]=read_info(file,filexml,ruta_tmp);
+%         if isfield(infor.project.subject,'subjectInfo')
+%             clases=infor.project.subject.subjectInfo(1).CONTENT;
+%             subject_id=infor.project.subject.subjectIdentifier;
+%         else
+%             clases=infor.project.subject.researchGroup;
+%             subject_id=infor.project.subject.subjectIdentifier;
+%         end
+%         str.class_label=clases;
+%         str.subject_id=subject_id;
+%         str.adnic.adni=adni;
+%         str.adnic.ppmi=ppmi;
+%         catch
+%             msgbox('los archivos xml deben estar contenidos en el mismo directorio si quiere leer la info')
+%         end
+%     end
     
     %%
     
@@ -161,16 +161,20 @@ function [stack, str]= leer_img(nombre, tipoImg, ruta, orientar)
 end
 
 function [in]=read_info(brain_op,bnamxml_op,directorio)
-if strcmp(brain_op(end-3:end),bnamxml_op(end-7:end-4))
-    name_xml=bnamxml_op;
-else
-    return
+    if strcmp(brain_op(end-3:end),bnamxml_op(end-7:end-4))
+        name_xml=bnamxml_op;
+    else
+        return
+    end
+    inform='info.xml';
+    copyfile([directorio  name_xml],inform)
+    in=xml_read(inform);fprintf('.')
+    delete(inform);
+    clear name_xml
 end
-inform='info.xml';
-copyfile([directorio  name_xml],inform)
-in=xml_read(inform);fprintf('.')
-delete(inform);
-clear name_xml
 
+function img = entre0y1(img)
+    img(isnan(img))=0;
+    img = img - min(img(:));
+    img = img / max(img(:));
 end
-    

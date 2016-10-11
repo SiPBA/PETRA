@@ -32,10 +32,10 @@ function imgOpen (hObject, ptrData, varargin)
     if ~iscell(names) && names == 0, return; end
 
     % Ask for modality
-    [ok, idx] = dlgSelec(ptrData.params.imgTypes, 1, ...
+    idx = ptrDlgSelec(ptrData.params.imgTypes(:,2), 1, ...
                  ptrLgGetString('main_SelectMod'));
-    if ~ok, return; end
-    type = ptrData.params.imgTypes{idx};
+    if ~idx, return; end
+    type = ptrData.params.imgTypes{idx,1};
 
     % Read images
     set(ptrData.handles.win,'Pointer','watch')
@@ -73,11 +73,15 @@ end
 
 
 function imgClose (hObject, ptrData, varargin)
-    % Get selected images
-    sel = getSelectedIdx (ptrData);
-    if isempty(sel), 
-        ptrDlgMessage('$main_NoImSel','$all_Warning'); 
-        return; 
+    if isempty(varargin)
+        % Get selected images
+        sel = getSelectedIdx (ptrData);
+        if isempty(sel), 
+            ptrDlgMessage('$main_NoImSel','$all_Warning'); 
+            return; 
+        end
+    else
+        sel = [varargin{1}];
     end
     
     noSel = setdiff(1:numel(ptrData.images), sel);
@@ -87,9 +91,6 @@ function imgClose (hObject, ptrData, varargin)
     
     % Repaint the panel
     ptrSetMainPanel(ptrData);    
-
-    % Update statusbar 
-    ptrStatusBar(hObject, 'updateTxt');
 end
 
 
@@ -112,10 +113,10 @@ function imgNormSpa (hObject, ptrData, varargin)
     for i=1:numel(sel)
         ptrStatusBar (hObject, 'updateProgress', (i-1)/numel(sel), ...
             '$main_Nomalizing');
-        [error, vol, hdr] = norm_espacial (ptrData.images(sel(i)).volume, ...
-                                           ptrData.images(sel(i)).hdr, ...
-                                           ptrData.images(sel(i)).type, ...
-                                           ptrData.params.pathTpl);
+        [error, vol, hdr] = ptrNormSpa (ptrData.images(sel(i)).volume, ...
+                                        ptrData.images(sel(i)).hdr, ...
+                                        ptrData.images(sel(i)).type, ...
+                                        ptrData.params.pathTpl);
         if ~error,
             ptrData.images(sel(i)).volume = vol;
             ptrData.images(sel(i)).hdr = hdr;
@@ -200,6 +201,9 @@ function imgSave (hObject, ptrData, varargin)
         return; 
     end
     
+    % Show help (keywords)
+    ptrDlgMessage('$main_SaveHelp','$main_SavingImages')
+    
     % Get path, names and format
     fmts = {'*.nii', 'NIfTI (*.nii)';
              '*.hdr', 'NIfTI (2 archivos) (*.hdr)';
@@ -211,23 +215,26 @@ function imgSave (hObject, ptrData, varargin)
         dftName = [ptrData.images(sel(1)).filePath filesep ...
             ptrData.images(sel(1)).fileName];
     else
-        dftName = [ptrData.params.dir filesep ...
-            '<' ptrLgGetString('main_CurrentNames') '>'];
+        dftName = [ptrData.params.dir filesep '#name_modified.nii'];
     end 
     [nombre, ruta, tipo] = uiputfile(fmts, title, dftName);
     if isequal(nombre,0), return; end
     if tipo == 3, fmt = 'a75'; else fmt = fmts{tipo}(3:end); end
 
     % Save images
+    names = {};
     for i=1:numel(sel)
         ptrStatusBar (hObject, 'updateProgress', (i-1)/numel(sel), ...
             '$main_SavingImages');
         [p, n, e] = fileparts (nombre);
-        if strcmp(n, ['<' ptrLgGetString('main_CurrentNames') '>']),
-            desti = [ruta filesep ptrData.images(sel(i)).fileName e];
-        else
-            desti = [ruta filesep n '_' num2str(i) e];
-        end
+        
+        n = strrep(n, '#name', ptrData.images(sel(i)).fileName);
+        n = strrep(n, '#class', ptrData.images(sel(i)).class);
+        n = strrep(n, '#number', num2str(sel));
+        
+        if any(strcmp(names, n)), n = [n '_' num2str(i)]; end
+        names{i} = n;
+        desti = [ruta filesep n e];
         
         ok = guardar_img (ptrData.images(sel(i)).volume, ...
                           ptrData.images(sel(i)).hdr, fmt, desti);
@@ -257,12 +264,14 @@ function imgClassify (hObject, ptrData, varargin)
         im = ptrData.images(varargin{1});
     end
     
-    % Check errors
+    % Check if a training is loaded
     if ~isfield(ptrData, 'train') || ~isfield(ptrData.train, 'trn'), 
         ptrDlgMessage('$main_NoTraining', '$main_ClassUnable');
         return
     end
-    if ~strcmp(ptrData.train.trn.info.tipoImgs, im.type),
+    
+    % Check images' modality and size match with the training
+    if ptrData.train.trn.info.tipoImgs ~= im.type,
         ptrDlgMessage('$main_DifImgType', '$main_ClassUnable');
         return
     end   
@@ -326,20 +335,20 @@ end
 
 function trnCreate (hObject, ptrData, varargin)
 
-    % Check if there are images selected
+    % Check if there are selected images 
     sel = getSelectedIdx (ptrData);
     if isempty(sel),
         ptrDlgMessage('$main_NoImgTrn','$all_Error');
         return; 
     end
     
-    % Check if only one type of images
-    type = unique({ptrData.images(sel).type});
+    % Check if only one modality of images
+    type = unique(cell2mat({ptrData.images(sel).type}));
     if numel(type)>1
         ptrDlgMessage('$main_ManyTypes','$all_Error');
         return;
     end
-    type = type{1};
+    type = type(1);
     
     % Check if two classes
     classes = unique({ptrData.images(sel).class});
@@ -348,31 +357,84 @@ function trnCreate (hObject, ptrData, varargin)
         return;
     end
     
-    % Create label vector
-    for i=1:numel(sel)
+    % Ask for name and method
+    [name, methodName, methodPath] = ptrDlgCreateTraining(...
+        ptrData.params.pathMethods);
+    if name==-1, return; end
+    
+    % Create volumes matrix and label vector
+    set(ptrData.handles.win,'Pointer','watch')
+    num = numel(sel);
+    for i=1:num
+        ptrStatusBar (hObject, 'updateProgress', (i-1)/(2*num), ...
+            '$main_PreparingData');
         volumes (i,:,:,:) = ptrData.images(sel(i)).volume;
-        if strcmpi(ptrData.images(sel(i)).class,'CTL')
-            labels(i) = 0;
-        else
-            labels(i) = 1;
+        labels(i) = double(~strcmpi(ptrData.images(sel(i)).class,'CTL'));
+    end
+    volumes = double(volumes);
+    meanVol = squeeze(mean(volumes));
+    sizeVol = size(meanVol);
+    th = graythresh(meanVol(:,:));
+    mask = meanVol >= th;
+    if isempty(find(mask, 1)), th = 0; mask = meanVol >= 0; end
+    for i=1:num
+        ptrStatusBar (hObject, 'updateProgress', (num+i-1)/(2*num), ...
+            '$main_PreparingData');
+        volumes(i,:,:,:) = squeeze(volumes(i,:,:,:)) .* mask;
+    end
+
+    % Create training structure
+    ptrStatusBar(ptrData.handles.win, 'updateProgress', -1, ...
+        '$dlgEntrenar_Creating');
+    trn = [];
+    trn.labels = labels;
+    trn.clases = classes;
+    trn.sc = 1;
+    trn.mascara = mask;
+    trn.met = methodPath;
+    trn.info.descrip = name;
+    trn.info.met_name = methodName;
+    trn.info.date = datestr(now);
+    trn.info.nImgs = size(volumes,1);
+    trn.info.tipoImgs = type;
+    trn.info.tamaImgsOri = sizeVol;
+    trn.info.tamaImgsRed = sizeVol;
+    trn.info.umbral = uint8(th*100);
+    trn.img_x = (squeeze(meanVol(floor(sizeVol(1)/2),:,:)));
+    trn.img_y = (squeeze(meanVol(:,floor(sizeVol(2)/2),:)));
+    trn.img_z = (squeeze(meanVol(:,:,floor(sizeVol(3)/2))));
+    trn.train = ptrCreateTraining(trn, volumes, ...
+        ptrData.params.pathMethods, ptrData.params.pathClassifiers);
+    
+    % If success, compute unique filename and save
+    if ~isempty(trn.train)
+        lis = dir([ptrData.params.pathTrn filesep '*.trn']); k = 1;
+        while true
+            fileName = sprintf('trn_%03d.trn',k); k = k+1;
+            if ~any(strcmp({lis(:).name}, fileName)), break; end
         end
+        fileName = [ptrData.params.pathTrn filesep fileName];
+        save(fileName, '-struct', eval([char(39) 'trn' char(39)]));
+        ptrDlgMessage([ptrLgGetString('dlgEntrenar_Created') ' ' fileName],...
+            '$dlgEntrenar_CreatedTitle');
     end
     
-    dlgEntrenar (ptrData.params, volumes, labels, classes, type);
+    set(ptrData.handles.win,'Pointer','arrow')
+    ptrStatusBar(ptrData.handles.win, 'updateTxt');
 end
 
 
 function trnLoad (hObject, ptrData, varargin)
-    [ok, trn, file] = dlgSelecTrn(ptrData.params.pathTrn, ...
-        ptrData.params.imgTypes);
-    if ok == false, return, end
+    trnFile = ptrDlgSelecTrn(ptrData.params.imgTypes, ...
+        ptrData.params.pathTrn);
+    if trnFile == 0, return, end
 
-    ptrData.train.trn = trn;
-    ptrData.train.fileName = file;
-    ptrData.train.name = trn.info.descrip;
+    ptrData.train.trn = load(trnFile, '-mat');
+    ptrData.train.fileName = trnFile;
+    ptrData.train.name = ptrData.train.trn.info.descrip;
     guidata(hObject, ptrData);
     
-    % Enable 'Show details' options in menu
+    % Enable 'Show details' option in menu
     set(ptrData.handles.menu.trn.item(3), 'Enable', 'on');
     
     % Update statusbar 
@@ -383,7 +445,7 @@ end
 
 function trnDetails (hObject, ptrData, varargin)
     if ~isfield(ptrData, 'train'), return; end
-    ptrInfoTrn(ptrData.train, ptrData.params.colormap);
+    ptrInfoTrn(ptrData.train, ptrData.params);
 end
 
 

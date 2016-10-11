@@ -8,7 +8,6 @@
 % RETURN:
 % - res     -> The position of the selected answer or -1 if dialog is canceled
 %
-
 function res = ptrDlgQuestion(msg, title, options)
     winWidth = 500;      % Windows width
     textCtlHeight = 35;  % Height reserved for question text
@@ -25,7 +24,7 @@ function res = ptrDlgQuestion(msg, title, options)
             options{i} = ptrLgGetString(option(2:end));
         end
     end
-    btnTex = langGetString('all_SelecBtn');
+    btnTex = ptrLgGetString('all_SelecBtn');
 
     f = figure('Name', title, 'NumberTitle', 'off','visible','off', ...
         'WindowStyle','modal');

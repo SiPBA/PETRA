@@ -35,7 +35,7 @@ function dlgResClasif_OpeningFcn(hObject, eventdata, handles, varargin)
     handles.trnFile = varargin{8};
     handles.numAxes = 0;
 
-    str = [ptrLgGetString('resClas_Classes') ' ' strjoin(handles.clases,', ')];
+    str = [ptrLgGetString('resClas_Classes') ' ' ptrStrJoin(handles.clases,', ')];
     set(handles.etiClases,'String',str);
     str = [ptrLgGetString('resClas_Estimation') ' ' handles.clases{handles.clase+1}];
     set(handles.etiClase,'String',str);
@@ -205,9 +205,9 @@ function dlg_ResizeFcn(hObject, eventdata, handles)
     
 
 function addTrain (handles)
-    [ok, clase] = dlgSelec(handles.clases, handles.clase+1, ...
+    clase = ptrDlgSelec(handles.clases, handles.clase+1, ...
                       'Seleccione la clase');
-    if ok == false, return, end
+    if clase == 0, return, end
     etiq = clase-1;
     trn = handles.trn;
 
@@ -230,4 +230,45 @@ function addTrain (handles)
     handles.output.trnFlag = true;
     handles.output.trn = trn;
     guidata(handles.dlg, handles);
+    
+
+function setButtonIcons (h, fpath)
+
+    % If h is not a button handle, find buttons
+    if strcmp(class(handle(h)), 'uicontrol')
+        hBtns = h;
+    else
+        hBtns = findobj(h, 'Style','pushbutton')';
+        hBtns = [hBtns findobj(h, 'Style','togglebutton')'];
+    end
+    
+    % For each button....
+    for hb = hBtns
+        str = get(hb,'String');
+        if length(str)<5 || ~strcmp(str(1:4),'ico:'), continue, end
+        
+        %Get icons name (one or more)
+        spacePos = strfind (str,' ');
+        if isempty(spacePos)
+            endPos = numel(str);
+        else
+            endPos = spacePos(1)-1;
+        end
+        fnames = ptrStrSplit(str(5:endPos), ':');
+        set (hb,'String',str(endPos+2:end));
+
+        % Load icons. Show the first one and save the other ones
+        for ic = 1:numel(fnames)
+            fname = [fpath filesep fnames{ic}];
+            try
+                ico = imread (fname,'BackgroundColor', [1 1 1]);
+                ico = imresize(ico,[20 20]);
+            catch e
+                ico = [];
+            end
+            icons{ic} = ico;
+        end
+        set(hb, 'CData', icons{1});
+        if numel(icons)>1, set(hb,'UserData',struct('icons',{icons})); end
+    end
     

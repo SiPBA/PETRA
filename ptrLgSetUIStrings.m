@@ -17,6 +17,7 @@ function ptrLgSetUIStrings (h)
             if ~ischar(value), continue, end;
             value = strtrim (value);
             userData = get(lis(i), 'UserData');
+            if isempty(userData), userData = []; end
             
             if numel(value) > 0 && strcmp(value(1),'$')
                 string = langStrings.(value(2:end));
@@ -42,5 +43,5 @@ function ptrLgSetUIStrings (h)
         end
     end
 
-    if showMsg, dlgMessage(langStrings.('all_lang_error')); end
+    if showMsg, ptrDlgMessage(langStrings.('all_lang_error')); end
 end

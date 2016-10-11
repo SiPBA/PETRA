@@ -1,6 +1,6 @@
 function str = nifticreate (img, filetype, voxel_size, originator, datatype)
     if nargin<5, datatype = 0; end
-    if nargin<4, originator = [0 0 0]; end
+    if nargin<4, originator = size(img)/2; end
     if nargin<3, voxel_size = [1 1 1]; end
     if nargin<2, filetype = 2; end
     if nargin<1, error('Sintaxis: str = nifticreate (<Voxel_matrix>,...)'); end
@@ -8,7 +8,7 @@ function str = nifticreate (img, filetype, voxel_size, originator, datatype)
     
     dim = size(img);
     dim = [numel(dim) dim ones(1,7-numel(dim))];
-    voxel_size = [0 voxel_size ones(1,7-numel(voxel_size))];
+    voxel_size = [3 voxel_size ones(1,7-numel(voxel_size))];
     originator = [originator zeros(1,5-numel(originator))];
 
     if datatype == 0,
@@ -46,10 +46,10 @@ function str = nifticreate (img, filetype, voxel_size, originator, datatype)
                   originator, glmax, glmin);
     elseif filetype == 1,
         str.hdr = crear_cab_nifti (dim, datatype, bitpix, voxel_size, ...
-                  0, glmax, glmin, 'ni1');
+                  originator, 0, glmax, glmin, 'ni1');
     else
         str.hdr = crear_cab_nifti (dim, datatype, bitpix, voxel_size, ...
-                  352, glmax, glmin, 'n+1');
+                  originator, 352, glmax, glmin, 'n+1');
     end
     
     str.machine = 'ieee-be';
@@ -60,7 +60,7 @@ end
 
 
 function hdr = crear_cab_nifti (dim, datatype, bitpix, voxel_size, ...
-               vox_offset, glmax, glmin, magic)
+               originator, vox_offset, glmax, glmin, magic)
     % header_key -> 0-40  ->  40 bytes
     hdr.hk.sizeof_hdr       = 348;
     hdr.hk.data_type        = '';
@@ -101,12 +101,12 @@ function hdr = crear_cab_nifti (dim, datatype, bitpix, voxel_size, ...
     hdr.hist.quatern_b       = 0;
     hdr.hist.quatern_c       = 0;
     hdr.hist.quatern_d       = 0;
-    hdr.hist.qoffset_x       = 0;
-    hdr.hist.qoffset_y       = 0;
-    hdr.hist.qoffset_z       = 0;
-    hdr.hist.srow_x          = [0 0 0 0];
-    hdr.hist.srow_y          = [0 0 0 0];
-    hdr.hist.srow_z          = [0 0 0 0];
+    hdr.hist.qoffset_x       = originator(1);
+    hdr.hist.qoffset_y       = originator(2);
+    hdr.hist.qoffset_z       = originator(3);
+    hdr.hist.srow_x          = [voxel_size(2) 0 0 originator(1)];
+    hdr.hist.srow_y          = [0 voxel_size(3) 0 originator(2)];
+    hdr.hist.srow_z          = [0 0 voxel_size(4) originator(3)];
     hdr.hist.intent_name     = '';
     hdr.hist.magic           = magic;
 end

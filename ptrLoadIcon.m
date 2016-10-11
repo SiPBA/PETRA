@@ -4,6 +4,9 @@ function ico = ptrLoadIcon(params, name, bgColor)
     [p, n, e] = fileparts(name);
     if isempty(e), e = '.png'; end
     name = [params.pathIcons filesep n e];
+    if ismethod(bgColor,'getColorComponents')
+        bgColor = double(bgColor.getColorComponents([]));
+    end
     
     try
         ico = imread (name, 'BackgroundColor', bgColor);

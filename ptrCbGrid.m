@@ -31,7 +31,9 @@ function refreshImage (hObject, ptrData, varargin)
         vol(1:size(sl,1),1:size(sl,2),1,i) = sl;
     end
     
-    montage(vol);
+    if nVols==1, mSize = [1,1]; else mSize = [NaN, NaN]; end
+    axes(ptrData.handles.mainPanel.axes);
+    montage(vol, 'Size', mSize);
     colormap (ptrData.params.colormap);
     
     set (ptrData.handles.mainPanel.buttonsBar.sliderSlice, 'SliderStep', ...

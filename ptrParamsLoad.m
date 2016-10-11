@@ -56,8 +56,30 @@ function params = ptrParamsLoad()
     params.colormaps = load (params.colormapsFile, '-mat');
     params.colormap = params.colormaps.(params.colormapName);
     
+    % List-View params
+    params.listView.sliceAxesW = 150;
+    params.listView.sliceAxesH = 150;
+    params.listView.volPanelW = params.listView.sliceAxesW * 3 + 10 * 4;
+    params.listView.volPanelH = params.listView.sliceAxesH + 10*4 + 18*2;
+    params.listView.volPanelMarginW = 10;
+    params.listView.volPanelMarginH = 10;
+    params.listView.volsColumns = 1;
+    params.listView.volsRows = 1;
+    
     % Image modalities supported
-    params.imgTypes = {'SPECT ECD' 'SPECT DaTSCAN' 'PET FDG' 'MRI'};
+    %params.imgTypes = {'SPECT ECD' 'SPECT DaTSCAN' 'PET FDG' 'MRI'};
+    params.imgTypes = {...
+        101 'Structural MRI (gray and white matter and CSF)'; ...
+        102 'Structural MRI (only gray matter)'; ...
+        103 'Structural MRI (only white matter)'; ...
+        301 '99mTc-HMPAO SPECT'; ...
+        302 '99mTc-ECD SPECT'; ...
+        303 '123I-Ioflupane SPECT (DaTSCAN)'; ...
+        401 '18F-FDG PET'; ...
+        402 '18F-DMFP PET'};
 
+    % Bug flag
+    [v,d] = version();
+    params.bugNestedPanels = year(d) < 2015;
     
 end

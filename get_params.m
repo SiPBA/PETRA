@@ -3,7 +3,7 @@ function varargout = get_params (params, varargin)
     num = nargout;
     if num < 1, num = 1; end
     params = strtrim(params);
-    if numel(params)>0, res = strsplit (params, delimiter); else res={}; end
+    if numel(params)>0, res = ptrStrSplit (params, delimiter); else res={}; end
     
     out = cell(num,1);
     for i=1:num

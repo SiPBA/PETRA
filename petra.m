@@ -1,6 +1,4 @@
-%
-% PETRA is copyrighted software. Please read file licence.txt
-%
+
 function petra
 
     % Load params

@@ -11,14 +11,32 @@ function ptrDlgMessage(msg, title)
 
     if ~isempty(msg) && strcmp(msg(1),'$'), msg = ptrLgGetString(msg(2:end)); end
     if ~isempty(title) && strcmp(title(1),'$'), title = ptrLgGetString(title(2:end)); end
-    okString = ptrLgGetString('all_OkBtn');
+    try
+        okString = ptrLgGetString('all_OkBtn');
+    catch e
+        okString = 'OK';
+    end
+
+    % Define text font
+    font.FontUnits = 'pixels';
+    font.FontSize = 12;
+    font.FontName = 'Helvetica';
+    font.FontWeight = 'normal';
+
+    % Calculate textbox size
+    auxi = uicontrol(font,'Style','text','Position',[20 50 360 60]);
+    [msg, textPos] = textwrap(auxi, ptrStrSplit(msg,'\n'));
+    textPos(3) = max(textPos(3), 360); % Minimum 360
+    textPos(4) = max(textPos(4),  60); % Minimum  60
+    delete (auxi);
+
 
     f = figure('Name', title, 'NumberTitle', 'off','visible','off', ...
                'WindowStyle','modal');
 
     pos = get(f, 'Position');
-    pos (3) = 400;
-    pos (4) = 120;
+    pos (3) = textPos(3) + 40;
+    pos (4) = textPos(4) + 60;
 
     set (f, 'Position', pos);
     set (f, 'MenuBar', 'none');
@@ -30,16 +48,13 @@ function ptrDlgMessage(msg, title)
     pan = uipanel('Parent',f, 'BorderType', 'none',...
                   'Units','pixels','Position',[1 1 pos(3) pos(4)]);
               
-    textCtl = uicontrol('Parent',pan, ...
+    textCtl = uicontrol(font, 'Parent',pan, ...
                   'String',msg, ...
                   'Style','text', ...
                   'Units','pixels', ...
-                  'Position',[20 50 pos(3)-40 pos(4)-60], ...
-                  'FontUnits','pixels', ...
-                  'FontName', 'Helvetica', ...
-                  'FontSize',12, ...
+                  'Position',textPos, ...
                   'HorizontalAlignment','left');
-
+              
     btnOk = uicontrol('Parent',pan, ...
                   'String',okString,...
                   'Units','pixels', ...

@@ -109,7 +109,7 @@ BWS2p=squeeze(sum(imgs_op,1));
 s2o=max(BWS2p,[],2);
 ax= find(s2==max(s2),1)-find(s2o==max(s2o),1); %diferencia basada en el maximo central comparado con el máximo en los estriados
 
-if strcmp(tiporf,'SPECT DaTSCAN')
+if tiporf == 303 %SPECT DaTSCAN
     ocheckhorz=(ax<=0);
 else
     ocheckhorz=((maxdif-mindif)<=0);
