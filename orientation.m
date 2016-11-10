@@ -4,7 +4,7 @@ function [imgs_o,ov,cm_sum_mean_vert,vari_vert,ocheckhorz,vari_horz]=orientation
 %devuelve un vector de 3 componentes con valores comprendidos entre -3 y 3
 %y la imagen orientada correctamente, de forma que:
 
-
+ 
 A=size(imgs);
 posdim=[1 2 3];
 BW=zeros(A);
@@ -19,7 +19,7 @@ for i=1:A(3)
     se = strel('disk',1);
     imintop=imopen(imint,se);
     BW(:,:,i)=imfill(squeeze(imintop),'holes');
-    
+     
 end
 
 %%%%%%%%%%%
@@ -28,6 +28,17 @@ end
 % dim2 = la linea frente-cogote
 % dim3 = la linea coronilla-cuello
 %%%%%%%%%%%%
+
+% Path para error cuando las imágenes tienen mucho espacio en negro. 
+zmin = find(sum(sum(BW,1),2)>0,1,'first');
+zmax = find(sum(sum(BW,1),2)>0,1,'last');
+ymin = find(sum(sum(BW,1),3)>0,1,'first');
+ymax = find(sum(sum(BW,1),3)>0,1,'last');
+xmin = find(sum(sum(BW,2),3)>0,1,'first');
+xmax = find(sum(sum(BW,2),3)>0,1,'last');
+
+BW = BW(xmin:xmax, ymin:ymax, zmin:zmax);
+imgs_mod = imgs(xmin:xmax, ymin:ymax, zmin:zmax);
 
 cc=bwconncomp(BW);
 stats=regionprops(cc);fprintf('.')
@@ -53,7 +64,7 @@ dim2=(x-3==posdim);
 
 dimes=find(~dim2);
 
-Ct=squeeze(sum(imgs,find(dim2)));
+Ct=squeeze(sum(imgs_mod,find(dim2)));
 windowt=Ct(ceil(reBoundingBox(dimes(1))):floor(reBoundingBox(dimes(1))+reBoundingBox(dimes(1)+3)),ceil(reBoundingBox(dimes(2))):floor(reBoundingBox(dimes(2))+(reBoundingBox(dimes(2)+3))));
 ccr1=normxcorr2(flipdim(windowt,1),Ct);
 ccr2=normxcorr2(flipdim(windowt,2),Ct);
