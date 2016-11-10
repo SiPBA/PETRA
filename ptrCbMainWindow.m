@@ -15,7 +15,7 @@ end
 
 
 function imgOpen (hObject, ptrData, varargin)
-    cancel = 0; % To manage if cancelling loading or not (choice). 
+%     cancel = 0; % To manage if cancelling loading or not (choice). 
     tipos = {'*.hdr;*.HDR;*.nii;*.NII;*.dcm;*.DCM;*.bmp;*.BMP;*.IMA;*.ima;*.A00',...
          [ptrLgGetString('main_AllFormats') ' (*.hdr, *.nii, *.dcm, *.bmp, *.ima)'];
          '*.hdr;*.HDR', 'Analyze/NIfTI (*.hdr/img)';
@@ -38,26 +38,26 @@ function imgOpen (hObject, ptrData, varargin)
     if ~idx, return; end
     type = ptrData.params.imgTypes{idx,1};
 
-    choice = questdlg('Do you like PETRA to automatically orientate the image files for you? This feature usually works, but sometimes might crash unexpectedly.', ...
-	'Automatic Orientation', ...
-	'Yes','No','Cancel','Yes');
+%     choice = questdlg('Do you like PETRA to automatically orientate the image files for you? This feature usually works, but sometimes might crash unexpectedly.', ...
+% 	'Automatic Orientation', ...
+% 	'Yes','No','Cancel','Yes');
     
     % Handle response
-    switch choice
-        case 'Yes'
-            orientation = 1;
-        case 'No'
-            orientation = 0;
-        case 'Cancel'
-            cancel = 1;
-    end
-    if (~cancel),
+%     switch choice
+%         case 'Yes'
+%             orientation = 1;
+%         case 'No'
+%             orientation = 0;
+%         case 'Cancel'
+%             cancel = 1;
+%     end
+%     if (~cancel),
         % Read images
         set(ptrData.handles.win,'Pointer','watch')
         for i=1:numel(names)
             ptrStatusBar (hObject, 'updateProgress', (i-1)/numel(names), ...
                 '$main_LoadingImages');
-            [stack, str] = leer_img ([fPath filesep names{i}], type, '', orientation);
+            [stack, str] = leer_img ([fPath filesep names{i}], type);
             [p, name, ext] = fileparts(names{i});
 
             img.volume = stack;
@@ -84,7 +84,7 @@ function imgOpen (hObject, ptrData, varargin)
 
         % Update status bar
         ptrStatusBar (hObject, 'updateTxt');
-    end
+%     end
 end
 
 
