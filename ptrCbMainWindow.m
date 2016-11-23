@@ -405,6 +405,9 @@ function trnCreate (hObject, ptrData, varargin)
     
     % If success, compute unique filename and save
     if ~isempty(trn.train)
+        if exist(ptrData.params.pathTrn,'dir')~=7
+            mkdir(ptrData.params.pathTrn);
+        end
         lis = dir([ptrData.params.pathTrn filesep '*.trn']); k = 1;
         while true
             fileName = sprintf('trn_%03d.trn',k); k = k+1;
