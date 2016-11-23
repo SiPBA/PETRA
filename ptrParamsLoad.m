@@ -9,13 +9,17 @@ function params = ptrParamsLoad()
     params.optionsFile = [params.pathMain filesep 'options.cfg'];
     params.licenceFile = [params.pathMain filesep 'licence.txt'];
     params.creditsFile = [params.pathMain filesep 'credits.txt'];
+    params.iconsFile = [params.pathMain filesep 'icons.png'];
+    
+    params.iconsOrder = {'open','save','close','go_left','go_right',...
+                         'play','stop','question','sliceAll','sliceOne',...
+                         'hand','rotate','zoom_in','zoom_out','zoom_reset'};
 
     params.pathMethods = [params.pathMain filesep 'Methods'];
     params.pathTrn = [params.pathMain filesep 'Trainings'];
     params.pathTpl = [params.pathMain filesep 'Templates'];
     params.pathFeatureExtrac = [params.pathMain filesep 'FeatureExtrac'];
     params.pathClassifiers = [params.pathMain filesep 'Classifiers'];
-    params.pathIcons = [params.pathMain filesep 'Icons'];
     
     params.statusBarHeight = 28;
     params.displayModeFcn = {'ptrDsList','ptrDsGrid','ptrDsSecuence'};

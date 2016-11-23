@@ -1,7 +1,12 @@
 function ptrCbMainWindow (hObject, eventdata, action, varargin)
     func = eval(['@' action]);
     ptrData = guidata (hObject);
-    func (hObject, ptrData, varargin{:});
+    try
+        func (hObject, ptrData, varargin{:});
+    catch e
+        ptrDlgMessage(e.message,'$all_Error')
+        set(ptrData.handles.win,'Pointer','arrow')
+    end
 end
 
 
@@ -320,32 +325,8 @@ function imgClassify (hObject, ptrData, varargin)
         return;
     end
     
-    if isfield(res, 'figFunction')
-        [trnFlag, trn] = dlgResClasif (ptrData.train.trn.clases, res.class, ...
-                      ptrData.params, res.comps, res.figFunction, res, ...
-                      ptrData.train.trn, ptrData.train.fileName);
-                  
-        % Update training if the image has been added
-        if trnFlag, 
-            ptrData.train.trn = trn;
-            guidata(hObject, ptrData);
-        end
-    else
-        if size(res.args.train.options,1)==1
-            res.dimplot=1;
-        elseif size(res.args.train.options,1)==2
-            res.dimplot=2;
-        else
-            prompt = {langGetString('ppal_ScattDim')};
-            dlg_title = langGetString('ppal_ResultVisual');
-            num_lines = 1;
-            def = {'2'};
-            answer = inputdlg(prompt,dlg_title,num_lines,def);
-            res.dimplot=str2double(answer{1});
-        end
-
-        representar_results(res);
-    end
+    % Show results
+    ptrDlgResults(ptrData, res);
 end
 
 
@@ -474,7 +455,6 @@ function changeLang (hObject, ptrData, varargin)
     petraParams.langStrings = ...
         ptrData.params.langStrings.(ptrData.params.langSelected);
     
-    set (ptrData.handles.win,'Visible','off');
     delete(ptrData.handles.toolbar.toolbar);
     delete(ptrData.handles.statusBar.statusBar);
     menus = fieldnames(ptrData.handles.menu);
@@ -483,11 +463,8 @@ function changeLang (hObject, ptrData, varargin)
     end
 
     pos = get(ptrData.handles.win,'Position');
-    ptrDsMainWindow(ptrData.handles.win);
+    ptrDsMainWindow(ptrData.handles.win, pos(1:2));
     ptrSetMainPanel(ptrData);
-    set (ptrData.handles.win,'Position',pos);
-    set (ptrData.handles.win,'Visible','on');
-    
 end
 
 

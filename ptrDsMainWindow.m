@@ -1,12 +1,15 @@
 
-function ptrDsMainWindow (hMainWin)    
+function ptrDsMainWindow (hMainWin, mainWinPos)    
     ptrData = guidata (hMainWin);
+    set (0, 'Units', 'pixels');
 
     % Estimate position centered in the screen
-    set (0, 'Units', 'pixels');
-    screenSize = get (0, 'ScreenSize');
-    mainWinPos = [round((screenSize(3) - ptrData.params.mainWinSize(1))/2) ...
-                  round((screenSize(4) - ptrData.params.mainWinSize(2))/2)]; 
+    if nargin<2,
+        screenSize = get (0, 'ScreenSize');
+        mainWinSize = ptrData.params.mainWinSize;
+        mainWinPos = [round((screenSize(3) - mainWinSize(1))/2) ...
+                      round((screenSize(4) - mainWinSize(2))/2)]; 
+    end
     
     % Customize figure properties          
     set(ptrData.handles.win, 'Name', 'Petra', ...

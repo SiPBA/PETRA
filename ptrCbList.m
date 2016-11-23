@@ -62,7 +62,7 @@ end
 
 
 function setSlices (hObject, ptrData, varargin)
-    if strcmp(get(gcf,'selectiontype'),'normal')
+    if strcmp(get(ptrData.handles.win,'SelectionType'),'normal')
         i = varargin{1};
         j = varargin{2};
         h = ptrData.handles.mainPanel.volPanel(i);
@@ -209,26 +209,23 @@ function rotateAndFlip(hObject, ptrData, varargin)
     i = varargin{1};
     j = varargin{2};
     action = varargin{3};
-    if strcmp(action,'flip')
-            newvol = flipdim(ptrData.images(i).volume, j);
-    else
-        if strcmp(action,'cw'), way = -1; else way = 1; end
-        newvol = [];
-        tam = size(ptrData.images(i).volume);
-        if j==1
-            for k=1:tam(1)
-                newvol(k,:,:) = rot90(squeeze(ptrData.images(i).volume(k,:,:)), way);
-            end
-        elseif j==2
-            for k=1:tam(2)
-                newvol(:,k,:) = rot90(squeeze(ptrData.images(i).volume(:,k,:)), way);
-            end
-        elseif j==3
-            for k=1:tam(3)
-                newvol(:,:,k) = rot90(squeeze(ptrData.images(i).volume(:,:,k)), way);
-            end
-        end
+    
+    dim = {':',':',':'}; 
+    ks = [3 3 2]; ps = [1 3 2; 3 2 1; 2 1 3];
+    switch action
+        case 'flip'
+            dim{j} = size(ptrData.images(i).volume,j):-1:1;
+            newvol = ptrData.images(i).volume(dim{:});
+        case 'anticw'
+            dim{ks(j)} = size(ptrData.images(i).volume,ks(j)):-1:1;
+            newvol = ptrData.images(i).volume(dim{:});
+            newvol = permute(newvol, ps(j,:));
+        case 'cw'
+            newvol = permute(ptrData.images(i).volume, ps(j,:));
+            dim{ks(j)} = size(newvol,ks(j)):-1:1;
+            newvol = newvol(dim{:});
     end
+    
     ptrData.images(i).volume = newvol;
     guidata (hObject, ptrData);
     drawSlices (hObject, ptrData, i);
