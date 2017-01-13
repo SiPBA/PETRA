@@ -252,6 +252,8 @@ function imgSave (hObject, ptrData, varargin)
         n = strrep(n, '#name', ptrData.images(sel(i)).fileName);
         n = strrep(n, '#class', ptrData.images(sel(i)).class);
         n = strrep(n, '#number', num2str(sel));
+        foldername = strsplit(ptrData.images(sel(i)).filePath, filesep);
+        n = strrep(n, '#folder', foldername{end-1});
         
         if any(strcmp(names, n)), n = [n '_' num2str(i)]; end
         names{i} = n;

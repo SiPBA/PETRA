@@ -46,7 +46,7 @@ Control;Code;EN:English;SP:Español
 1;main_PreparingData;Preparing images; Preparando imágenes
 1;main_SaveDglTitle;Please enter file name and format;Indique nombre y formato de archivo
 1;main_CurrentNames;Current names;Nombres actuales
-1;main_SaveHelp;You can use the following keys as part of the name:\n\n#name\n#class\n#number\n\nThey will be respectively replaced by the current name, the class and the number of each image.;Puede usar las siguientes palabras clave como parte del nombre:\n\n#name\n#class\n#number.\n\nEstas claves serán reemplazadas por el nombre actual, la clase o el número de orden de cada imagen respectivamente.
+1;main_SaveHelp;You can use the following keys as part of the name:\n\n#name\n#folder\n#class\n#number\n\nThey will be respectively replaced by the current name, the folder, the class and the number of each image.;Puede usar las siguientes palabras clave como parte del nombre:\n\n#name\n#folder\n#class\n#number.\n\nEstas claves serán reemplazadas por el nombre actual, la carpeta, la clase o el número de orden de cada imagen respectivamente.
 
 1;main_NoTraining;No training was loaded;No hay ningún entrenamiento cargado
 1;main_ClassUnable;Unable to classify;No se puede clasificar
